@@ -1,4 +1,6 @@
-      SUBROUTINE GCONTR(Z, NRZ, NX, NY, CV, NCV, ZMAX, BITMAP, DRAW)    
+      module gcontr_m
+      contains
+      SUBROUTINE GCONTR(Z, CV, DRAW, ZMAX)
 !
 !     THIS SUBROUTINE DRAWS A CONTOUR THROUGH EQUAL VALUES OF AN ARRAY.
 !
@@ -8,8 +10,6 @@
 !     OF Z ARE ASSUMED TO LIE UPON THE NODES OF A TOPOLOGICALLY
 !     RECTANGULAR COORDINATE SYSTEM - E.G. CARTESIAN, POLAR (EXCEPT
 !     THE ORIGIN), ETC.
-!
-!     NRZ IS THE NUMBER OF ROWS DECLARED FOR Z IN THE CALLING PROGRAM.
 !
 !     NX IS THE LIMIT FOR THE FIRST SUBSCRIPT OF Z.
 !
@@ -72,9 +72,24 @@
 !     FILL0, MARK1 AND IGET ARE MACHINE SENSITIVE.
 !
 !     ******************************************************************
-!
-      REAL Z(NRZ,1), CV(1)
-      INTEGER BITMAP(1)
+
+        use FILL0_m, only: fill0
+        use iget_m, only: iget
+        use MARK1_m, only: MARK1
+        
+        REAL, intent(in):: Z(:, :) ! (nx, ny)
+        real, intent(in):: cv(:) ! (ncv)
+
+      interface
+         subroutine draw(x, y, iflag)
+         implicit none
+         real, intent(inout):: x, y
+         integer, intent(in):: iflag
+         end subroutine draw
+      end interface
+      
+      real, intent(in), optional:: zmax
+      integer bitmap((2 * size(z) * size(cv) - 1) / (bit_size(0) - 1) + 1)
       INTEGER L1(4), L2(4), IJ(2)
 !
 !     L1 AND L2 CONTAIN LIMITS USED DURING THE SPIRAL SEARCH FOR THE
@@ -103,9 +118,16 @@
       DATA L1(3) /-1/, L1(4) /-1/
       DATA I1 /1,0/, I2 /1,-1/, I3 /1,0,0,1,1,0/
 !
+      nx = size(z, 1)
+      ny = size(z, 2)
+      ncv = size(cv)
       L1(1) = NX
       L1(2) = NY
-      DMAX = ZMAX
+      if (present(zmax)) then
+         DMAX = ZMAX
+      else
+         dmax = huge(0.)
+      end if
 !
 !     SET THE CURRENT PEN POSITION.  THE DEFAULT POSITION CORRESPONDS
 !     TO Z(1,1).
@@ -154,24 +176,41 @@
       II = I + I1(L)
       JJ = J + I1(3-L)
       IF (Z(II,JJ).GT.DMAX) GO TO 130
-      ASSIGN 100 TO JUMP
+      jump = 100
 !     THE NEXT 15 STATEMENTS (OR SO) DETECT BOUNDARIES.
    60 IX = 1
       IF (IJ(3-L).EQ.1) GO TO 80
       II = I - I1(3-L)
       JJ = J - I1(L)
-      IF (Z(II,JJ).GT.DMAX) GO TO 70
-      II = I + I2(L)
-      JJ = J + I2(3-L)
-      IF (Z(II,JJ).LT.DMAX) IX = 0
-   70 IF (IJ(3-L).GE.L1(3-L)) GO TO 90
-   80 II = I + I1(3-L)
+      IF (Z(II,JJ) <= DMAX) then
+         II = I + I2(L)
+         JJ = J + I2(3-L)
+         IF (Z(II,JJ).LT.DMAX) IX = 0
+      end IF
+      IF (IJ(3-L).GE.L1(3-L)) GO TO 90
+80    continue
+      II = I + I1(3-L)
       JJ = J + I1(L)
       IF (Z(II,JJ).GT.DMAX) GO TO 90
-      IF (Z(I+1,J+1).LT.DMAX) GO TO JUMP, (100, 280)
+      IF (Z(I+1,J+1).LT.DMAX) then
+         if (jump == 100) then
+            GO TO 100
+         else if (jump == 280) then
+            go to 280
+         else
+            stop 1
+         end if
+      end IF
    90 IX = IX + 2
-      GO TO JUMP, (100, 280)
-  100 IF (IX.EQ.3) GO TO 130
+      if (jump == 100) then
+         GO TO 100
+      else if (jump == 280) then
+         go to 280
+      else
+         stop 1
+      end if
+100   continue
+      IF (IX.EQ.3) GO TO 130
       IF (IX+IBKEY.EQ.0) GO TO 130
 !     NOW DETERMINE WHETHER THE LINE SEGMENT IS CROSSED BY THE CONTOUR.
       II = I + I1(L)
@@ -232,10 +271,11 @@
 !     THE BOTTOM EDGE BEING EDGE NUMBER ONE.
 !
   210 NI = 1
-      IF (IEDGE.LT.3) GO TO 220
-      I = I - I3(IEDGE)
-      J = J - I3(IEDGE+2)
-  220 DO 250 K=1,4
+      IF (IEDGE >= 3) then
+         I = I - I3(IEDGE)
+         J = J - I3(IEDGE+2)
+      end IF
+      DO 250 K=1,4
         IF (K.EQ.IEDGE) GO TO 250
         II = I + I3(K)
         JJ = J + I3(K+1)
@@ -274,123 +314,22 @@
 !
   260 L = KS
       IFLAG = 1
-      ASSIGN 280 TO JUMP
-      IF (KS.LT.3) GO TO 270
-      I = I + I3(KS)
-      J = J + I3(KS+2)
-      L = KS - 2
-  270 IF (IGET(BITMAP,2*(NX*(NY*(ICV-1)+J-1)+I-1)+L).EQ.0) GO TO 60
+      JUMP = 280
+      IF (KS >= 3) then
+         I = I + I3(KS)
+         J = J + I3(KS+2)
+         L = KS - 2
+      end IF
+      IF (IGET(BITMAP,2*(NX*(NY*(ICV-1)+J-1)+I-1)+L).EQ.0) GO TO 60
       IFLAG = 5
       GO TO 290
-  280 IF (IX.NE.0) IFLAG = 4
+280   continue
+      IF (IX.NE.0) IFLAG = 4
   290 IEDGE = KS + 2
       IF (IEDGE.GT.4) IEDGE = IEDGE - 4
       XINT(IEDGE) = XINT(KS)
       GO TO 200
 !
-      END
-      DIMENSION Z(51,51), C(10), WORK(1680)                             
-!     DIMENSION OF WORK IS LARGE ENOUGH TO CONTAIN                      
-!     2*(DIMENSION OF C)*(TOTAL DIMENSION OF Z) USEFUL BITS.  SEE THE   
-!     BITMAP ROUTINES ACCESSED BY GCONTR.                               
-      REAL MU                                                           
-      EXTERNAL DRAW                                                     
-      COMMON /CUR/ XCUR, YCUR                                           
-      DATA C(1), C(2), C(3), C(4), C(5) /3.05,3.2,3.5,3.50135,3.6/      
-      DATA C(6), C(7), C(8), C(9), C(10) /3.766413,4.0,4.130149,5.0,     &
-        10.0/                                                           
-      DATA NX /51/, NY /51/, NF /10/                                    
-      DATA XMIN /-2.0/, XMAX /2.0/, YMIN /-2.0/, YMAX /2.0/, MU /0.3/   
-      DX = (XMAX-XMIN)/FLOAT(NX-1)                                      
-      DY = (YMAX-YMIN)/FLOAT(NY-1)                                      
-      XCUR = 1.0                                                        
-      YCUR = 1.0                                                        
-      IF (MOD(NX,2).NE.0) YCUR = FLOAT(NY)                              
-      IF (MOD(NY,2).NE.0) XCUR = FLOAT(NX)                              
-      X = XMIN - DX                                                     
-      DO 20 I=1,NX                                                      
-        Y = YMIN - DY                                                   
-        X = X + DX                                                      
-        DO 10 J=1,NY                                                    
-          Y = Y + DY                                                    
-          Z(I,J) = (1.0-MU)*(2.0/SQRT((X-MU)**2+Y**2)+(X-MU)**2+Y**2)    &
-            + MU*(2.0/SQRT((X+1.0-MU)**2+Y**2)+(X+1.0-MU)**2+Y**2)      
-   10   CONTINUE                                                        
-   20 CONTINUE                                                          
-      CALL GCONTR(Z, 51, NX, NY, C, NF, 1.E6, WORK, DRAW)               
-      STOP                                                              
-      END                                                               
-      REAL Z(51,51), C(10), CVAL(10), MU                                
-      INTEGER WORK(1680), L(10), CLAB(10)                               
-!     DIMENSION OF WORK IS LARGE ENOUGH TO CONTAIN                      
-!     2*(DIMENSION OF C)*(TOTAL DIMENSION OF Z) USEFUL BITS.  SEE THE   
-!     BITMAP ROUTINES ACCESSED BY GCONTR.                               
-      EXTERNAL DRAW                                                     
-      COMMON /GCTCOM/ XCUR, YCUR, XL, YL, CVAL, CLAB, NCH               
-      DATA C(1), C(2), C(3), C(4), C(5) /3.05,3.2,3.5,3.50135,3.6/      
-      DATA C(6), C(7), C(8), C(9), C(10) /3.766413,4.0,4.130149,5.0,     &
-        10.0/                                                           
-      DATA L(1), L(2), L(3), L(4), L(5) /1HA,1HB,1HC,1HD,1HE/           
-      DATA L(6), L(7), L(8), L(9), L(10) /1HF,1HG,1HH,1HI,1HJ/          
-      DATA NX /51/, NY /51/, NF /10/, NXG /5/, NYG /5/                  
-      DATA XMIN /-2.0/, XMAX /2.0/, YMIN /-2.0/, YMAX /2.0/, MU /0.3/   
-      DATA XLEN /8.0/, YLEN /8.0/                                       
-!     INITIALIZE PLOTTING SUBROUTINES.                                  
-      CALL PLOTS                                                        
-      DX = (XMAX-XMIN)/FLOAT(NX-1)                                      
-      DY = (YMAX-YMIN)/FLOAT(NY-1)                                      
-      XL = XLEN/FLOAT(NX)                                               
-      YL = YLEN/FLOAT(NY)                                               
-      XCUR = 1.0                                                        
-      YCUR = 1.0                                                        
-      IF (MOD(NX,2).NE.0) YCUR = FLOAT(NY)                              
-      IF (MOD(NY,2).NE.0) XCUR = FLOAT(NX)                              
-      X = XMIN - DX                                                     
-      DO 20 I=1,NX                                                      
-        Y = YMIN - DY                                                   
-        X = X + DX                                                      
-        DO 10 J=1,NY                                                    
-          Y = Y + DY                                                    
-!     EVALUATE FUNCTION TO BE PLOTTED.                                  
-          Z(I,J) = (1.0-MU)*(2.0/SQRT((X-MU)**2+Y**2)+(X-MU)**2+Y**2)    &
-            + MU*(2.0/SQRT((X+1.0-MU)**2+Y**2)+(X+1.0-MU)**2+Y**2)      
-   10   CONTINUE                                                        
-   20 CONTINUE                                                          
-      DO 30 I=1,NF                                                      
-        CVAL(I) = C(I)                                                  
-        CLAB(I) = L(I)                                                  
-   30 CONTINUE                                                          
-      NCH = 1                                                           
-!     PEN UP MOVE TO BELOW LOWER LEFT CORNER OF PAGE.                   
-!     THIS CALL WORKS DIFFERENTLY ON DIFFERENT MACHINES.  YOU MAY       
-!     NEED TO CHANGE IT.                                                
-      CALL PLOT(0.0, -11.0, -3)                                         
-!     PEN UP MOVE TO 1 INCH ABOVE LOWER LEFT CORNER OF PAGE.            
-      CALL PLOT(0.0, 1.0, -3)                                           
-      SX = 8.0/FLOAT(NXG)                                               
-      SY = 8.0/FLOAT(NXG)                                               
-!     DRAW A GRID.                                                      
-      CALL CGRID(1, NXG, SX, 0.0, 0.0, NYG, SY, 0.0, 0.0)               
-!     DRAW THE CONTOUR PLOTS.                                           
-      CALL GCONTR(Z, 51, NX, NY, CVAL, NF, 1.0E6, WORK, DRAW)           
-      XX = 9.0                                                          
-      YY = 8.0                                                          
-!     WRITE A TABLE OF CONTOUR LABELS AND VALUES.                       
-      CALL SYMBOL(XX, YY+0.14, 0.07, 10HCONTOUR ID, 0.0, 10)            
-      DO 40 I=1,NF                                                      
-        CALL SYMBOL(XX, YY, 0.07, L(I), 0.0, 2)                         
-        CALL NUMBER(XX+0.12, YY, 0.07, C(I), 0.0, 5)                    
-        YY = YY - 0.14                                                  
-   40 CONTINUE                                                          
-!     PEN UP MOVE TO BELOW LOWER RIGHT CORNER OF PAGE.                  
-!     THIS CALL WORKS DIFFERENTLY ON DIFFERENT MACHINES.  YOU MAY NEED  
-!     TO CHANGE IT, OR YOU MAY NOT NEED IT.                             
-      CALL PLOT(10.0, -11.0, -3)                                        
-!     REDUCE PICTURE SIZE, PLOT END OF FILE INFORMATION.                
-!     THE END OF FILE INFORMATION MAY NOT BE AVAILABLE AT ALL SITES.    
-!     IF NOT AVAILABLE, CHANGE THE NEXT TWO STATEMENTS TO COMMENTS.     
-      CALL FACTOR(0.3)                                                  
-      CALL PLOT(0.0, 0.0, 999)                                          
-      STOP                                                              
-!                                                                       
-      END                                                               
+      END SUBROUTINE GCONTR
+      end module gcontr_m
+      

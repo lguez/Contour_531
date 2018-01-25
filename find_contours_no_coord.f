@@ -54,12 +54,13 @@ contains
 
     close(unit)
 
-    do i = 1, n_cont
-       if (contours(i)%closed) call assert(contours(i)%n_points >= 4 &
-            .and. contours(i)%points(:, contours(i)%n_points) &
-            == contours(i)%points(:, 1), &
-            "find_contours_no_coord: closed contour")
-    end do
+    ! Correct really strange behavior which is sometimes encountered:
+    forall (i = 1:n_cont, contours(i)%closed .and. &
+         (contours(i)%n_points <= 3 &
+         .or. &
+         any(contours(i)%points(:, contours(i)%n_points) &
+         /= contours(i)%points(:, 1)))) &
+         contours(i)%closed = .false.
         
   end subroutine find_contours_no_coord
 

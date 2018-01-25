@@ -2,8 +2,8 @@ module draw_to_scratch_m
 
   implicit none
 
-  integer unit
-  integer n_cont ! number of contours
+  integer, protected:: unit
+  integer, protected:: n_cont ! number of contours
 
 contains
 

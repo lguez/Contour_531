@@ -25,7 +25,7 @@ all: ${lib_stat} log
 ${lib_stat}: ${lib_stat}(${objects})
 
 depend ${VPATH}/depend.mk:
-	makedepf90 -free -Wmissing -Wconfused -I${VPATH} -nosrc $(addprefix -u , numer_rec_95 jumble nr_util) ${sources} >${VPATH}/depend.mk
+	makedepf90 -free -Wmissing -Wconfused -I${VPATH} -nosrc $(addprefix -u , jumble nr_util) ${sources} >${VPATH}/depend.mk
 
 clean:
 	rm -f ${lib_stat} ${objects} log

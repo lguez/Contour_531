@@ -90,7 +90,10 @@
       
       real, intent(in), optional:: zmax
       integer bitmap((2 * size(z) * size(cv) - 1) / (bit_size(0) - 1) + 1)
-      INTEGER L1(4), L2(4), IJ(2)
+      INTEGER L1(4)
+      integer L2(4) ! [IMAX, JMAX, IMIN, JMIN]
+
+      integer IJ(2)
 !
 !     L1 AND L2 CONTAIN LIMITS USED DURING THE SPIRAL SEARCH FOR THE
 !     BEGINNING OF A CONTOUR.
@@ -172,23 +175,26 @@
       IF (Z(I,J).GT.DMAX) GO TO 140
       L = 1
 !     L=1 MEANS HORIZONTAL LINE, L=2 MEANS VERTICAL LINE.
-   50 IF (IJ(L).GE.L1(L)) GO TO 130
+50    continue
+      IF (IJ(L).GE.L1(L)) GO TO 130
       II = I + I1(L)
       JJ = J + I1(3-L)
       IF (Z(II,JJ).GT.DMAX) GO TO 130
       jump = 100
 !     THE NEXT 15 STATEMENTS (OR SO) DETECT BOUNDARIES.
    60 IX = 1
-      IF (IJ(3-L).EQ.1) GO TO 80
-      II = I - I1(3-L)
-      JJ = J - I1(L)
-      IF (Z(II,JJ) <= DMAX) then
-         II = I + I2(L)
-         JJ = J + I2(3-L)
-         IF (Z(II,JJ).LT.DMAX) IX = 0
+
+      IF (IJ(3-L) /= 1) then
+         II = I - I1(3-L)
+         JJ = J - I1(L)
+         IF (Z(II,JJ) <= DMAX) then
+            II = I + I2(L)
+            JJ = J + I2(3-L)
+            IF (Z(II,JJ).LT.DMAX) IX = 0
+         end IF
+         IF (IJ(3-L).GE.L1(3-L)) GO TO 90
       end IF
-      IF (IJ(3-L).GE.L1(3-L)) GO TO 90
-80    continue
+
       II = I + I1(3-L)
       JJ = J + I1(L)
       IF (Z(II,JJ).GT.DMAX) GO TO 90
@@ -201,7 +207,8 @@
             stop 1
          end if
       end IF
-   90 IX = IX + 2
+90    continue
+      IX = IX + 2
       if (jump == 100) then
          GO TO 100
       else if (jump == 280) then

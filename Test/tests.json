@@ -1,0 +1,71 @@
+[
+    {
+	"title" : "Gcontr",
+	"args" : "$compil_prod_dir/test_gcontr",
+	"input": "&main_nml /\n"
+    },
+    {
+	"title" : "Zmax",
+	"args" : "$compil_prod_dir/test_gcontr",
+	"input": "&main_nml ZMAX=10. /\n"
+    },
+    {
+	"title" : "Find_contours_no_coord",
+	"args" : "$compil_prod_dir/test_find_contours_no_coord",
+	"input": "&main_nml /\n"
+    },
+    {
+	"title" : "No_coord_zmax",
+	"args" : "$compil_prod_dir/test_find_contours_no_coord",
+	"input": "&main_nml ZMAX=10. /\n",
+	"description": "test_find_contours_no_coord with zmax."
+    },
+    {
+	"description" : "Example from the Contour_531 distribution.",
+	"title" : "Reg_grid",
+	"required" : [["$input_dir/levels_1.txt", "levels.txt"]],
+	"input": "&main_nml /\n",
+	"args" : [
+            "$compil_prod_dir/test_find_contours",
+            "$input_dir/example.nc"
+	]
+    },
+    {
+	"description" : "Near borders. Only one level.",
+	"title" : "Borders",
+	"input" : "&main_nml /\n",
+	"required" : [["$input_dir/levels_2.txt", "levels.txt"]],
+	"args" : [
+	    "$compil_prod_dir/test_find_contours",
+	    "$input_dir/h.nc"
+	]
+    },
+    {
+	"description" : "Regular grid, with zmax.",
+	"title" : "Reg_grid_zmax",
+	"required" : [["$input_dir/levels_1.txt", "levels.txt"]],
+	"input": "&main_nml ZMAX=10. /\n",
+	"args" : [
+            "$compil_prod_dir/test_find_contours",
+            "$input_dir/example.nc"
+	]
+    },
+    {
+	"title" : "Irreg_grid",
+	"args" : ["$compil_prod_dir/test_find_contours", 
+		  "$input_dir/example_irreg.nc"],
+	"description" : "Irregular grid.",
+	"input": "&main_nml reg_grid = f /\n",
+	"required" : [["$input_dir/levels_1.txt", "levels.txt"]]
+    },
+    {
+	"description" : "Line of missing values at x = 1.12.",
+	"title" : "Missing",
+	"required" : [["$input_dir/levels_1.txt", "levels.txt"]],
+	"input": "&main_nml ZMAX=80. /\n",
+	"args" : [
+            "$compil_prod_dir/test_find_contours",
+            "$input_dir/example_missing.nc"
+	]
+    }
+]

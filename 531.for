@@ -1,4 +1,4 @@
-      SUBROUTINE FILL0(BITMAP, N)                                       FIL   10
+      SUBROUTINE FILL0(BITMAP, N)                                       
 C
 C     FILL THE FIRST N BITS OF BITMAP WITH ZEROES.
 C
@@ -20,7 +20,7 @@ C
      *  )
       RETURN
       END
-      SUBROUTINE MARK1(BITMAP, N)                                       MAR   10
+      SUBROUTINE MARK1(BITMAP, N)                                       
 C
 C     PUT A ONE IN THE NTH BIT OF BITMAP.
 C
@@ -39,7 +39,7 @@ C
      *  )
       RETURN
       END
-      FUNCTION IGET(BITMAP, N)                                          IGE   10
+      FUNCTION IGET(BITMAP, N)                                          
 C
 C     IGET=0 IF THE NTH BIT OF BITMAP IS ZERO, ELSE IGET IS ONE.
 C
@@ -56,7 +56,7 @@ C
       IGET = MOD(BITMAP(NWORD+1)/2**(NBPW-NBIT-1),2)
       RETURN
       END
-      SUBROUTINE GCONTR(Z, NRZ, NX, NY, CV, NCV, ZMAX, BITMAP, DRAW)    GCO   10
+      SUBROUTINE GCONTR(Z, NRZ, NX, NY, CV, NCV, ZMAX, BITMAP, DRAW)    
 C
 C     THIS SUBROUTINE DRAWS A CONTOUR THROUGH EQUAL VALUES OF AN ARRAY.
 C
@@ -347,112 +347,112 @@ C
       GO TO 200
 C
       END
-      DIMENSION Z(51,51), C(10), WORK(1680)                             MAN   10
-C     DIMENSION OF WORK IS LARGE ENOUGH TO CONTAIN                      MAN   20
-C     2*(DIMENSION OF C)*(TOTAL DIMENSION OF Z) USEFUL BITS.  SEE THE   MAN   30
-C     BITMAP ROUTINES ACCESSED BY GCONTR.                               MAN   40
-      REAL MU                                                           MAN   50
-      EXTERNAL DRAW                                                     MAN   60
-      COMMON /CUR/ XCUR, YCUR                                           MAN   70
-      DATA C(1), C(2), C(3), C(4), C(5) /3.05,3.2,3.5,3.50135,3.6/      MAN   80
-      DATA C(6), C(7), C(8), C(9), C(10) /3.766413,4.0,4.130149,5.0,    MAN   90
-     *  10.0/                                                           MAN  100
-      DATA NX /51/, NY /51/, NF /10/                                    MAN  110
-      DATA XMIN /-2.0/, XMAX /2.0/, YMIN /-2.0/, YMAX /2.0/, MU /0.3/   MAN  120
-      DX = (XMAX-XMIN)/FLOAT(NX-1)                                      MAN  130
-      DY = (YMAX-YMIN)/FLOAT(NY-1)                                      MAN  140
-      XCUR = 1.0                                                        MAN  150
-      YCUR = 1.0                                                        MAN  160
-      IF (MOD(NX,2).NE.0) YCUR = FLOAT(NY)                              MAN  170
-      IF (MOD(NY,2).NE.0) XCUR = FLOAT(NX)                              MAN  180
-      X = XMIN - DX                                                     MAN  190
-      DO 20 I=1,NX                                                      MAN  200
-        Y = YMIN - DY                                                   MAN  210
-        X = X + DX                                                      MAN  220
-        DO 10 J=1,NY                                                    MAN  230
-          Y = Y + DY                                                    MAN  240
-          Z(I,J) = (1.0-MU)*(2.0/SQRT((X-MU)**2+Y**2)+(X-MU)**2+Y**2)   MAN  250
-     *      + MU*(2.0/SQRT((X+1.0-MU)**2+Y**2)+(X+1.0-MU)**2+Y**2)      MAN  260
-   10   CONTINUE                                                        MAN  270
-   20 CONTINUE                                                          MAN  280
-      CALL GCONTR(Z, 51, NX, NY, C, NF, 1.E6, WORK, DRAW)               MAN  290
-      STOP                                                              MAN  300
-      END                                                               MAN  310
-      REAL Z(51,51), C(10), CVAL(10), MU                                MAN   10
-      INTEGER WORK(1680), L(10), CLAB(10)                               MAN   20
-C     DIMENSION OF WORK IS LARGE ENOUGH TO CONTAIN                      MAN   30
-C     2*(DIMENSION OF C)*(TOTAL DIMENSION OF Z) USEFUL BITS.  SEE THE   MAN   40
-C     BITMAP ROUTINES ACCESSED BY GCONTR.                               MAN   50
-      EXTERNAL DRAW                                                     MAN   60
-      COMMON /GCTCOM/ XCUR, YCUR, XL, YL, CVAL, CLAB, NCH               MAN   70
-      DATA C(1), C(2), C(3), C(4), C(5) /3.05,3.2,3.5,3.50135,3.6/      MAN   80
-      DATA C(6), C(7), C(8), C(9), C(10) /3.766413,4.0,4.130149,5.0,    MAN   90
-     *  10.0/                                                           MAN  100
-      DATA L(1), L(2), L(3), L(4), L(5) /1HA,1HB,1HC,1HD,1HE/           MAN  110
-      DATA L(6), L(7), L(8), L(9), L(10) /1HF,1HG,1HH,1HI,1HJ/          MAN  120
-      DATA NX /51/, NY /51/, NF /10/, NXG /5/, NYG /5/                  MAN  130
-      DATA XMIN /-2.0/, XMAX /2.0/, YMIN /-2.0/, YMAX /2.0/, MU /0.3/   MAN  140
-      DATA XLEN /8.0/, YLEN /8.0/                                       MAN  150
-C     INITIALIZE PLOTTING SUBROUTINES.                                  MAN  160
-      CALL PLOTS                                                        MAN  170
-      DX = (XMAX-XMIN)/FLOAT(NX-1)                                      MAN  180
-      DY = (YMAX-YMIN)/FLOAT(NY-1)                                      MAN  190
-      XL = XLEN/FLOAT(NX)                                               MAN  200
-      YL = YLEN/FLOAT(NY)                                               MAN  210
-      XCUR = 1.0                                                        MAN  220
-      YCUR = 1.0                                                        MAN  230
-      IF (MOD(NX,2).NE.0) YCUR = FLOAT(NY)                              MAN  240
-      IF (MOD(NY,2).NE.0) XCUR = FLOAT(NX)                              MAN  250
-      X = XMIN - DX                                                     MAN  260
-      DO 20 I=1,NX                                                      MAN  270
-        Y = YMIN - DY                                                   MAN  280
-        X = X + DX                                                      MAN  290
-        DO 10 J=1,NY                                                    MAN  300
-          Y = Y + DY                                                    MAN  310
-C     EVALUATE FUNCTION TO BE PLOTTED.                                  MAN  320
-          Z(I,J) = (1.0-MU)*(2.0/SQRT((X-MU)**2+Y**2)+(X-MU)**2+Y**2)   MAN  330
-     *      + MU*(2.0/SQRT((X+1.0-MU)**2+Y**2)+(X+1.0-MU)**2+Y**2)      MAN  340
-   10   CONTINUE                                                        MAN  350
-   20 CONTINUE                                                          MAN  360
-      DO 30 I=1,NF                                                      MAN  370
-        CVAL(I) = C(I)                                                  MAN  380
-        CLAB(I) = L(I)                                                  MAN  390
-   30 CONTINUE                                                          MAN  400
-      NCH = 1                                                           MAN  410
-C     PEN UP MOVE TO BELOW LOWER LEFT CORNER OF PAGE.                   MAN  420
-C     THIS CALL WORKS DIFFERENTLY ON DIFFERENT MACHINES.  YOU MAY       MAN  430
-C     NEED TO CHANGE IT.                                                MAN  440
-      CALL PLOT(0.0, -11.0, -3)                                         MAN  450
-C     PEN UP MOVE TO 1 INCH ABOVE LOWER LEFT CORNER OF PAGE.            MAN  460
-      CALL PLOT(0.0, 1.0, -3)                                           MAN  470
-      SX = 8.0/FLOAT(NXG)                                               MAN  480
-      SY = 8.0/FLOAT(NXG)                                               MAN  490
-C     DRAW A GRID.                                                      MAN  500
-      CALL CGRID(1, NXG, SX, 0.0, 0.0, NYG, SY, 0.0, 0.0)               MAN  510
-C     DRAW THE CONTOUR PLOTS.                                           MAN  520
-      CALL GCONTR(Z, 51, NX, NY, CVAL, NF, 1.0E6, WORK, DRAW)           MAN  530
-      XX = 9.0                                                          MAN  540
-      YY = 8.0                                                          MAN  550
-C     WRITE A TABLE OF CONTOUR LABELS AND VALUES.                       MAN  560
-      CALL SYMBOL(XX, YY+0.14, 0.07, 10HCONTOUR ID, 0.0, 10)            MAN  570
-      DO 40 I=1,NF                                                      MAN  580
-        CALL SYMBOL(XX, YY, 0.07, L(I), 0.0, 2)                         MAN  590
-        CALL NUMBER(XX+0.12, YY, 0.07, C(I), 0.0, 5)                    MAN  600
-        YY = YY - 0.14                                                  MAN  610
-   40 CONTINUE                                                          MAN  620
-C     PEN UP MOVE TO BELOW LOWER RIGHT CORNER OF PAGE.                  MAN  630
-C     THIS CALL WORKS DIFFERENTLY ON DIFFERENT MACHINES.  YOU MAY NEED  MAN  640
-C     TO CHANGE IT, OR YOU MAY NOT NEED IT.                             MAN  650
-      CALL PLOT(10.0, -11.0, -3)                                        MAN  660
-C     REDUCE PICTURE SIZE, PLOT END OF FILE INFORMATION.                MAN  670
-C     THE END OF FILE INFORMATION MAY NOT BE AVAILABLE AT ALL SITES.    MAN  680
-C     IF NOT AVAILABLE, CHANGE THE NEXT TWO STATEMENTS TO COMMENTS.     MAN  690
-      CALL FACTOR(0.3)                                                  MAN  700
-      CALL PLOT(0.0, 0.0, 999)                                          MAN  710
-      STOP                                                              MAN  720
-C                                                                       MAN  730
-      END                                                               MAN  740
-      SUBROUTINE DRAW(X, Y, IFLAG)                                      DRA   10
+      DIMENSION Z(51,51), C(10), WORK(1680)                             
+C     DIMENSION OF WORK IS LARGE ENOUGH TO CONTAIN                      
+C     2*(DIMENSION OF C)*(TOTAL DIMENSION OF Z) USEFUL BITS.  SEE THE   
+C     BITMAP ROUTINES ACCESSED BY GCONTR.                               
+      REAL MU                                                           
+      EXTERNAL DRAW                                                     
+      COMMON /CUR/ XCUR, YCUR                                           
+      DATA C(1), C(2), C(3), C(4), C(5) /3.05,3.2,3.5,3.50135,3.6/      
+      DATA C(6), C(7), C(8), C(9), C(10) /3.766413,4.0,4.130149,5.0,    
+     *  10.0/                                                           
+      DATA NX /51/, NY /51/, NF /10/                                    
+      DATA XMIN /-2.0/, XMAX /2.0/, YMIN /-2.0/, YMAX /2.0/, MU /0.3/   
+      DX = (XMAX-XMIN)/FLOAT(NX-1)                                      
+      DY = (YMAX-YMIN)/FLOAT(NY-1)                                      
+      XCUR = 1.0                                                        
+      YCUR = 1.0                                                        
+      IF (MOD(NX,2).NE.0) YCUR = FLOAT(NY)                              
+      IF (MOD(NY,2).NE.0) XCUR = FLOAT(NX)                              
+      X = XMIN - DX                                                     
+      DO 20 I=1,NX                                                      
+        Y = YMIN - DY                                                   
+        X = X + DX                                                      
+        DO 10 J=1,NY                                                    
+          Y = Y + DY                                                    
+          Z(I,J) = (1.0-MU)*(2.0/SQRT((X-MU)**2+Y**2)+(X-MU)**2+Y**2)   
+     *      + MU*(2.0/SQRT((X+1.0-MU)**2+Y**2)+(X+1.0-MU)**2+Y**2)      
+   10   CONTINUE                                                        
+   20 CONTINUE                                                          
+      CALL GCONTR(Z, 51, NX, NY, C, NF, 1.E6, WORK, DRAW)               
+      STOP                                                              
+      END                                                               
+      REAL Z(51,51), C(10), CVAL(10), MU                                
+      INTEGER WORK(1680), L(10), CLAB(10)                               
+C     DIMENSION OF WORK IS LARGE ENOUGH TO CONTAIN                      
+C     2*(DIMENSION OF C)*(TOTAL DIMENSION OF Z) USEFUL BITS.  SEE THE   
+C     BITMAP ROUTINES ACCESSED BY GCONTR.                               
+      EXTERNAL DRAW                                                     
+      COMMON /GCTCOM/ XCUR, YCUR, XL, YL, CVAL, CLAB, NCH               
+      DATA C(1), C(2), C(3), C(4), C(5) /3.05,3.2,3.5,3.50135,3.6/      
+      DATA C(6), C(7), C(8), C(9), C(10) /3.766413,4.0,4.130149,5.0,    
+     *  10.0/                                                           
+      DATA L(1), L(2), L(3), L(4), L(5) /1HA,1HB,1HC,1HD,1HE/           
+      DATA L(6), L(7), L(8), L(9), L(10) /1HF,1HG,1HH,1HI,1HJ/          
+      DATA NX /51/, NY /51/, NF /10/, NXG /5/, NYG /5/                  
+      DATA XMIN /-2.0/, XMAX /2.0/, YMIN /-2.0/, YMAX /2.0/, MU /0.3/   
+      DATA XLEN /8.0/, YLEN /8.0/                                       
+C     INITIALIZE PLOTTING SUBROUTINES.                                  
+      CALL PLOTS                                                        
+      DX = (XMAX-XMIN)/FLOAT(NX-1)                                      
+      DY = (YMAX-YMIN)/FLOAT(NY-1)                                      
+      XL = XLEN/FLOAT(NX)                                               
+      YL = YLEN/FLOAT(NY)                                               
+      XCUR = 1.0                                                        
+      YCUR = 1.0                                                        
+      IF (MOD(NX,2).NE.0) YCUR = FLOAT(NY)                              
+      IF (MOD(NY,2).NE.0) XCUR = FLOAT(NX)                              
+      X = XMIN - DX                                                     
+      DO 20 I=1,NX                                                      
+        Y = YMIN - DY                                                   
+        X = X + DX                                                      
+        DO 10 J=1,NY                                                    
+          Y = Y + DY                                                    
+C     EVALUATE FUNCTION TO BE PLOTTED.                                  
+          Z(I,J) = (1.0-MU)*(2.0/SQRT((X-MU)**2+Y**2)+(X-MU)**2+Y**2)   
+     *      + MU*(2.0/SQRT((X+1.0-MU)**2+Y**2)+(X+1.0-MU)**2+Y**2)      
+   10   CONTINUE                                                        
+   20 CONTINUE                                                          
+      DO 30 I=1,NF                                                      
+        CVAL(I) = C(I)                                                  
+        CLAB(I) = L(I)                                                  
+   30 CONTINUE                                                          
+      NCH = 1                                                           
+C     PEN UP MOVE TO BELOW LOWER LEFT CORNER OF PAGE.                   
+C     THIS CALL WORKS DIFFERENTLY ON DIFFERENT MACHINES.  YOU MAY       
+C     NEED TO CHANGE IT.                                                
+      CALL PLOT(0.0, -11.0, -3)                                         
+C     PEN UP MOVE TO 1 INCH ABOVE LOWER LEFT CORNER OF PAGE.            
+      CALL PLOT(0.0, 1.0, -3)                                           
+      SX = 8.0/FLOAT(NXG)                                               
+      SY = 8.0/FLOAT(NXG)                                               
+C     DRAW A GRID.                                                      
+      CALL CGRID(1, NXG, SX, 0.0, 0.0, NYG, SY, 0.0, 0.0)               
+C     DRAW THE CONTOUR PLOTS.                                           
+      CALL GCONTR(Z, 51, NX, NY, CVAL, NF, 1.0E6, WORK, DRAW)           
+      XX = 9.0                                                          
+      YY = 8.0                                                          
+C     WRITE A TABLE OF CONTOUR LABELS AND VALUES.                       
+      CALL SYMBOL(XX, YY+0.14, 0.07, 10HCONTOUR ID, 0.0, 10)            
+      DO 40 I=1,NF                                                      
+        CALL SYMBOL(XX, YY, 0.07, L(I), 0.0, 2)                         
+        CALL NUMBER(XX+0.12, YY, 0.07, C(I), 0.0, 5)                    
+        YY = YY - 0.14                                                  
+   40 CONTINUE                                                          
+C     PEN UP MOVE TO BELOW LOWER RIGHT CORNER OF PAGE.                  
+C     THIS CALL WORKS DIFFERENTLY ON DIFFERENT MACHINES.  YOU MAY NEED  
+C     TO CHANGE IT, OR YOU MAY NOT NEED IT.                             
+      CALL PLOT(10.0, -11.0, -3)                                        
+C     REDUCE PICTURE SIZE, PLOT END OF FILE INFORMATION.                
+C     THE END OF FILE INFORMATION MAY NOT BE AVAILABLE AT ALL SITES.    
+C     IF NOT AVAILABLE, CHANGE THE NEXT TWO STATEMENTS TO COMMENTS.     
+      CALL FACTOR(0.3)                                                  
+      CALL PLOT(0.0, 0.0, 999)                                          
+      STOP                                                              
+C                                                                       
+      END                                                               
+      SUBROUTINE DRAW(X, Y, IFLAG)                                      
 C     THIS SUBROUTINE USES CALCOMP PLOT ROUTINES TO DRAW LINES FOR THE
 C     CONTOUR PLOTTING ROUTINE GCONTR.
       REAL CVAL(10)
@@ -485,7 +485,7 @@ C     CONTOUR PLOTTING ROUTINE GCONTR.
       RETURN
 C
       END
-      SUBROUTINE DRAW(X, Y, IFLAG)                                      DRA   10
+      SUBROUTINE DRAW(X, Y, IFLAG)                                      
 C
 C     DO OUTPUT FOR GCONTR.
 C
@@ -517,7 +517,7 @@ C     PRINT IS THE SYSTEM PRINTER FORTRAN I/O UNIT NUMBER.
 99995 FORMAT (15H FINISH CONTOUR, I3, 19H IN THE INTERIOR AT, 1P2E14.7)
 99994 FORMAT (33H REQUEST FOR CURRENT PEN POSITION)
       END
-      SUBROUTINE CGRID(NOPT, NX, SX, XS, XF, NY, SY, YS, YF)            CGR   10
+      SUBROUTINE CGRID(NOPT, NX, SX, XS, XF, NY, SY, YS, YF)            
 C
 C SUBROUTINE WHICH DRAWS A FRAME AROUND THE PLOT AND DRAWS
 C EITHER TICK MARKS OR GRID LINES.

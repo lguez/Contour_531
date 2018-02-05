@@ -2,8 +2,7 @@
 
 # 1. Source files and libraries
 
-makefile_dir = .
-VPATH = ${makefile_dir}/Sources
+VPATH = .
 sources = test_gcontr.f draw3.f cur.f define_example.f
 
 lib_list = contour_531 numer_rec_95 jumble geometry nr_util shapelib_03 fortrangis shp fortranc netcdf95 netcdff
@@ -32,14 +31,14 @@ all: ${execut} log
 test_gcontr: ${objects}
 test_find_contours_no_coord: define_example.o
 
-depend ${makefile_dir}/depend.mk:
-	makedepf90 -free -Wmissing -Wconfused -I${VPATH} -nosrc $(addprefix -u , ${lib_list} shapelib) ${sources} >${makefile_dir}/depend.mk
+depend ${VPATH}/depend.mk:
+	makedepf90 -free -Wmissing -Wconfused -I${VPATH} -nosrc $(addprefix -u , ${lib_list} shapelib) ${sources} >${VPATH}/depend.mk
 
 clean:
 	rm -f ${execut} ${objects} log
 
 clobber: clean
-	rm -f *.mod ${makefile_dir}/depend.mk
+	rm -f *.mod ${VPATH}/depend.mk
 
 log:
 	hostname >$@
@@ -47,5 +46,5 @@ log:
 	echo -e "\nFC = ${FC}\n\nFFLAGS = ${FFLAGS}\n\nLDLIBS = ${LDLIBS}\n\nLDFLAGS = ${LDFLAGS}" >>$@
 
 ifneq ($(MAKECMDGOALS), clobber)
-include ${makefile_dir}/depend.mk
+include ${VPATH}/depend.mk
 endif

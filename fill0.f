@@ -9,7 +9,9 @@ contains
     ! FILL THE FIRST N BITS OF BITMAP WITH ZEROES.
 
     INTEGER, intent(inout):: BITMAP(:)
-    integer, intent(in):: N ! n / nbpw + 1 must be <= size(bitmap)
+    integer, intent(in):: N
+    ! If mod(n, npbw /= 0) then size(bitmap) must be >= n / nbpw + 1,
+    ! else size(bitmap) must be >= n / nbpw.
 
     ! Local:
 
@@ -19,17 +21,13 @@ contains
     ! ACTUAL NUMBER OF BITS PER WORD, BUT AN IMPORTANT EXCEPTION IS
     ! THE CDC-6000 SERIES OF MACHINES, WHERE NBPW SHOULD BE 48.
 
-    integer i, LOOP, NBLW
+    integer LOOP, NBLW
 
     !------------------------------------------------------------------
 
     LOOP = N / NBPW
     NBLW = MOD(N, NBPW)
-    IF (LOOP /= 0) then
-       DO I=1, LOOP
-          BITMAP(I) = 0
-       end DO
-    end IF
+    BITMAP(:loop) = 0
     IF (NBLW /= 0) BITMAP(LOOP + 1) = MOD(BITMAP(LOOP + 1), 2**(NBPW - NBLW))
 
   END SUBROUTINE FILL0

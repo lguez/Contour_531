@@ -12,7 +12,7 @@ program test_find_contours
   use nr_util, only: assert
   use shapelib, only: shpfileobject, shpt_polygon, ftdouble, shpclose, shpt_arc
   use shapelib_03, only: shp_create_03, dbf_add_field_03, &
-       shp_append_simple_object_03, dbf_write_attribute_03
+       shp_append_object_03, dbf_write_attribute_03
 
   implicit none
 
@@ -99,15 +99,15 @@ program test_find_contours
               print *, "contour number ", i
               print *, "Zero area"
            else
-              call shp_append_simple_object_03(shape_number, &
-                   shphandle_polygon, shpt_polygon, contours(i)%points)
+              call shp_append_object_03(shape_number, shphandle_polygon, &
+                   shpt_polygon, contours(i)%points)
               call dbf_write_attribute_03(shphandle_polygon, shape_number, &
                    ifield = 0, fieldvalue = levels(j))
            end if
         else
            call assert(contours(i)%n_points >= 2, "open")
-           call shp_append_simple_object_03(shape_number, &
-                shphandle_polyline, shpt_arc, contours(i)%points)
+           call shp_append_object_03(shape_number, shphandle_polyline, &
+                shpt_arc, contours(i)%points)
            call dbf_write_attribute_03(shphandle_polyline, shape_number, &
                 ifield = 0, fieldvalue = levels(j))
         end if

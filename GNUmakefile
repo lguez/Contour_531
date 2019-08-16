@@ -2,9 +2,6 @@
 
 # 1. Source files 
 
-makefile_dir = .
-VPATH = ${makefile_dir}
-
 sources = gcontr.f iget.f mark1.f contour_531.f find_contours_irreg_grid.f draw_to_scratch.f polyline.f find_contours_no_coord.f find_contours_reg_grid.f convert_to_ind.f convert_to_irreg_coord.f convert_to_reg_coord.f null_polyline.f
 
 # 2. Objects and libraries
@@ -14,31 +11,27 @@ lib_stat = libcontour_531.a
 
 # 3. Compiler-dependent part
 
-mode = debug
-include ${general_compiler_options_dir}/${FC}_${mode}.mk
+FC = gfortran
+FFLAGS = -ffree-form -I/home/guez/build/Libraries_gfortran_debug/modules
+ARFLAGS = rvU
 
 # 4. Rules
 
 SHELL = bash
 .DELETE_ON_ERROR:
 .PHONY: all clean clobber depend
-all: ${lib_stat} log
+all: ${lib_stat}
 ${lib_stat}: ${lib_stat}(${objects})
 
-depend ${VPATH}/depend.mk:
-	makedepf90 -free -Wmissing -Wconfused -I${VPATH} -nosrc $(addprefix -u , jumble nr_util) ${sources} >${VPATH}/depend.mk
+depend depend.mk:
+	makedepf90 -free -Wmissing -Wconfused -nosrc $(addprefix -u , jumble nr_util) ${sources} >depend.mk
 
 clean:
-	rm -f ${lib_stat} ${objects} log
+	rm -f ${lib_stat} ${objects}
 
 clobber: clean
-	rm -f *.mod ${VPATH}/depend.mk
-
-log:
-	hostname >$@
-	${FC} ${version_flag} >>$@ 2>&1
-	echo -e "\nFC = ${FC}\n\nFFLAGS = ${FFLAGS}\n\nLDFLAGS = ${LDFLAGS}" >>$@
+	rm -f *.mod depend.mk
 
 ifneq ($(MAKECMDGOALS), clobber)
-include ${VPATH}/depend.mk
+include depend.mk
 endif

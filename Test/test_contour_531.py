@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+"""Compares graphically contours found by Matplotlib with contours
+found by Contour_531. Run the Fortran tests before using this
+script."""
+
 import askcli
 import csv
 import numpy as np
@@ -70,7 +74,8 @@ def plot_test_gcontr():
     ny = 51
     y = np.linspace(ymin, ymax, ny)
     z, c = define_example(x, y)
-    filename = input("File containing contours from test_gcontr? ")
+    filename = input("File containing contours from test_gcontr? (file "
+                     "test_gcontr.csv from test Gcontr or Zmax) ")
     l_gcontr = read_draw_output(filename)
     plt.figure()
 
@@ -102,7 +107,8 @@ def compare_gcontr_find_contours_no_coord():
 
     """
     
-    filename = input("File containing contours from test_gcontr? ")
+    filename = input("File containing contours from test_gcontr? (file "
+                     "test_gcontr.csv from test Gcontr or Zmax) ")
     l_gcontr = read_draw_output(filename)
     l_find_contours = read_draw_output("test_find_contours_no_coord.csv")
     assert len(l_gcontr) == len(l_find_contours)
@@ -189,7 +195,9 @@ def plot_test_contours():
             
 if __name__ == "__main__":
     m = askcli.Menu(["Plot contours from gcontr or find_contours_no_coord",
-                     "Compare gcontr and find_contours_no_coord",
+                     "Compare gcontr and find_contours_no_coord (the file "
+                     "test_find_contours_no_coord.csv should be in the current "
+                     "directory)",
                      "Test contour (regular or irregular)", "Quit"])
     while True:
         m.launch("Choice")

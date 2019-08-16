@@ -2,7 +2,8 @@
 
 # 1. Source files 
 
-VPATH = .
+makefile_dir = .
+VPATH = ${makefile_dir}
 
 sources = gcontr.f iget.f mark1.f contour_531.f find_contours_irreg_grid.f draw_to_scratch.f polyline.f find_contours_no_coord.f find_contours_reg_grid.f convert_to_ind.f convert_to_irreg_coord.f convert_to_reg_coord.f null_polyline.f
 

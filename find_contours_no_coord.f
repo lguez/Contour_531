@@ -12,7 +12,6 @@ contains
 
     use draw_to_scratch_m, only: init_scratch, draw_to_scratch, n_cont, unit
     use GCONTR_m, only: gcontr
-    use nr_util, only: assert
     use polyline_m, only: polyline
 
     real, intent(in):: z(:, :), level

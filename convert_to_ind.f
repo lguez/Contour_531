@@ -5,8 +5,11 @@ module convert_to_ind_m
   interface convert_to_ind
 
      ! For a regular grid. From position in coordinate space to
-     ! position in index space. Position (1., 1.) in index space
-     ! corresponds to corner.
+     ! position in index space, base 1. That is, position (1., 1.) in
+     ! index space corresponds to corner.
+
+     ! The difference between the specific procedures is the rank of
+     ! the first argument.
 
      module procedure convert_to_ind_one, convert_to_ind_several
   end interface convert_to_ind

@@ -2,7 +2,6 @@
 
 # 1. Source files and libraries
 
-VPATH = .
 sources = test_gcontr.f draw3.f cur.f define_example.f
 
 lib_list = contour_531 numer_rec_95 jumble geometry nr_util shapelib_03 fortrangis shp fortranc netcdf95 netcdff
@@ -15,11 +14,11 @@ execut = test_find_contours_no_coord test_gcontr test_find_contours
 
 # 3. Compiler-dependent part
 
-mode = debug
-include ${general_compiler_options_dir}/${FC}_${mode}.mk
-lib_dir = ${HOME}/Desktop/lib/Contour_531
-FFLAGS += -I${lib_dir}
-LDLIBS += -L${lib_dir}
+FC = gfortran
+
+FFLAGS = -ffree-form -I/home/guez/build/Libraries_gfortran_debug/modules -I/usr/include -I${HOME}/.local/lib/FortranGIS_gfortran
+
+LDLIBS = -L/home/guez/build/Libraries_gfortran_debug/Jumble -L/home/guez/build/Libraries_gfortran_debug/Contour_531 -L/home/guez/build/Libraries_gfortran_debug/Numer_Rec_95 -L/home/guez/build/Libraries_gfortran_debug/NR_util -L/home/guez/build/Libraries_gfortran_debug/NetCDF95 -L/home/guez/build/Libraries_gfortran_debug/Shapelib_03 -L/home/guez/build/Libraries_gfortran_debug/Geometry -L/home/guez/.local/lib/FortranGIS_gfortran -lshapelib_03 -lfortrangis -lcontour_531 -lnumer_rec_95 -lnetcdf95 -lshp -lfortranc -lgeometry -ljumble -lnetcdff -lnr_util
 
 # 4. Rules
 
@@ -27,24 +26,19 @@ SHELL = bash
 LINK.o = $(FC) $(LDFLAGS) $(TARGET_ARCH)
 .DELETE_ON_ERROR:
 .PHONY: all clean clobber depend
-all: ${execut} log
+all: ${execut}
 test_gcontr: ${objects}
 test_find_contours_no_coord: define_example.o
 
-depend ${VPATH}/depend.mk:
-	makedepf90 -free -Wmissing -Wconfused -I${VPATH} -nosrc $(addprefix -u , ${lib_list} shapelib) ${sources} >${VPATH}/depend.mk
+depend depend.mk:
+	makedepf90 -free -Wmissing -Wconfused -nosrc ${sources} >depend.mk
 
 clean:
-	rm -f ${execut} ${objects} log
+	rm -f ${execut} ${objects}
 
 clobber: clean
-	rm -f *.mod ${VPATH}/depend.mk
-
-log:
-	hostname >$@
-	${FC} ${version_flag} >>$@ 2>&1
-	echo -e "\nFC = ${FC}\n\nFFLAGS = ${FFLAGS}\n\nLDLIBS = ${LDLIBS}\n\nLDFLAGS = ${LDFLAGS}" >>$@
+	rm -f *.mod depend.mk
 
 ifneq ($(MAKECMDGOALS), clobber)
-include ${VPATH}/depend.mk
+include depend.mk
 endif

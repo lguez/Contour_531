@@ -22,6 +22,15 @@ LDLIBS = -L/home/guez/build/Libraries_gfortran_debug/Jumble -L/home/guez/build/L
 
 # 4. Rules
 
+%: %.o
+	$(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+%.o: %.f90
+	$(COMPILE.f) $(OUTPUT_OPTION) $<
+
+%: %.f90
+	$(LINK.f) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 SHELL = bash
 LINK.o = $(FC) $(LDFLAGS) $(TARGET_ARCH)
 .DELETE_ON_ERROR:

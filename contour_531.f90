@@ -7,7 +7,6 @@ module contour_531
   use find_contours_no_coord_m
   use find_contours_reg_grid_m
   use gcontr_m
-  use null_polyline_m
   use polyline_m
 
 end module contour_531

@@ -57,7 +57,7 @@ program test_find_contours
   call nf95_close(ncid)
 
   print *, 'Reading from "levels.txt"...'
-  call read_column("levels.txt", levels)
+  call read_column(levels, "levels.txt")
 
   write(unit = error_unit, nml = main_nml)
   write(unit = error_unit, fmt = *) "Enter namelist main_nml:"

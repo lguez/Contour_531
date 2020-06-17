@@ -1,11 +1,7 @@
-find_path(fortrangis_INCLUDE_DIR shapelib.mod)
-find_library(fortranc_LIBRARY fortranc)
-find_library(fortrangis_LIBRARY fortrangis)
 include(FindPkgConfig)
 pkg_check_modules(netcdf-fortran IMPORTED_TARGET netcdf-fortran)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 find_package(NetCDF REQUIRED)
-find_library(shapelib_LIBRARY shp)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(NetCDF95 CONFIG REQUIRED)
@@ -28,11 +24,9 @@ target_link_libraries(test_gcontr contour_531 numer_rec_95)
 # test_find_contours
 
 add_executable(test_find_contours test_find_contours.f90)
-target_include_directories(test_find_contours PRIVATE ${fortrangis_INCLUDE_DIR})
 
 target_link_libraries(test_find_contours jumble netcdf95 shapelib_03
-  contour_531 geometry ${fortrangis_LIBRARY} ${fortranc_LIBRARY}
-  ${shapelib_LIBRARY} PkgConfig::netcdf-fortran NetCDF::NetCDF nr_util)
+  contour_531 geometry nr_util)
 
 add_custom_target(tests_contour_531)
 

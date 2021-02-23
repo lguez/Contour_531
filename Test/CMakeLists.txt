@@ -14,18 +14,18 @@ endif()
 add_executable(test_find_contours_no_coord
   test_find_contours_no_coord.f90 define_example.f90)
 
-target_link_libraries(test_find_contours_no_coord contour_531 jumble
+target_link_libraries(test_find_contours_no_coord PRIVATE contour_531 jumble
   numer_rec_95)
 
 # test_gcontr
 add_executable(test_gcontr test_gcontr.f90 define_example.f90 draw3.f90 cur.f90)
-target_link_libraries(test_gcontr contour_531 numer_rec_95)
+target_link_libraries(test_gcontr PRIVATE contour_531 numer_rec_95)
 
 # test_find_contours
 
 add_executable(test_find_contours test_find_contours.f90)
 
-target_link_libraries(test_find_contours jumble netcdf95 shapelib_03
+target_link_libraries(test_find_contours PRIVATE jumble netcdf95 shapelib_03
   contour_531 geometry nr_util)
 
 add_custom_target(tests_contour_531)

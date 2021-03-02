@@ -8,6 +8,7 @@ add_library(contour_531 gcontr.f90 iget.f90 mark1.f90 contour_531.f90
 
 set_target_properties(contour_531 PROPERTIES Fortran_MODULE_DIRECTORY
   ${PROJECT_BINARY_DIR}/modules)
+
 target_include_directories(contour_531 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/modules>)
 

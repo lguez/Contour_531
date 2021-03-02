@@ -14,11 +14,14 @@ add_executable(test_find_contours_no_coord
   test_find_contours_no_coord.f90 define_example.f90)
 
 target_link_libraries(test_find_contours_no_coord PRIVATE contour_531 jumble
-  numer_rec_95)
+  numer_rec_95 nr_util)
 
 # test_gcontr
+
 add_executable(test_gcontr test_gcontr.f90 define_example.f90 draw3.f90 cur.f90)
-target_link_libraries(test_gcontr PRIVATE contour_531 numer_rec_95)
+
+target_link_libraries(test_gcontr PRIVATE contour_531 numer_rec_95
+  nr_util jumble)
 
 # test_find_contours
 

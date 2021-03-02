@@ -1,7 +1,6 @@
-include(FindPkgConfig)
-pkg_check_modules(netcdf-fortran IMPORTED_TARGET netcdf-fortran)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 find_package(NetCDF REQUIRED)
+find_package(NetCDF_Fortran REQUIRED)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(NetCDF95 CONFIG REQUIRED)

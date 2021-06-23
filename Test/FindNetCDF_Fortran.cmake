@@ -1,10 +1,13 @@
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(NetCDF_Fortran REQUIRED IMPORTED_TARGET netcdf-fortran)
+pkg_get_variable(netcdf_fortran_pcfiledir netcdf-fortran pcfiledir)
+message(STATUS "${CMAKE_CURRENT_LIST_FILE}")
+message(STATUS "-- Location of .pc file: ${netcdf_fortran_pcfiledir}")
 
 message(STATUS
-  "-- NetCDF-Fortran include flags: ${NetCDF_Fortran_INCLUDE_DIRS}")
+  "-- NetCDF-Fortran include directories: ${NetCDF_Fortran_INCLUDE_DIRS}")
 
-message(STATUS "-- NetCDF-Fortran libraries: ${NetCDF_Fortran_LIBRARIES}")
+message(STATUS "-- NetCDF-Fortran libraries: ${NetCDF_Fortran_LINK_LIBRARIES}")
 
 if(PKG_CONFIG_VERSION_STRING VERSION_LESS "0.29.2")
   # pkg-config strips system flags out of cflags. They do not appear

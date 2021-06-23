@@ -1,22 +1,22 @@
 [
     {
 	"title" : "Gcontr",
-	"args" : "$build_dir/test_gcontr",
+	"command" : "$build_dir/test_gcontr",
 	"input": "&main_nml /\n"
     },
     {
 	"title" : "Zmax",
-	"args" : "$build_dir/test_gcontr",
+	"command" : "$build_dir/test_gcontr",
 	"input": "&main_nml ZMAX=10. /\n"
     },
     {
 	"title" : "Find_contours_no_coord",
-	"args" : "$build_dir/test_find_contours_no_coord",
+	"command" : "$build_dir/test_find_contours_no_coord",
 	"input": "&main_nml /\n"
     },
     {
 	"title" : "No_coord_zmax",
-	"args" : "$build_dir/test_find_contours_no_coord",
+	"command" : "$build_dir/test_find_contours_no_coord",
 	"input": "&main_nml ZMAX=10. /\n",
 	"description": "test_find_contours_no_coord with zmax."
     },
@@ -25,7 +25,7 @@
 	"title" : "Reg_grid",
 	"required" : [["$input_dir/levels_1.txt", "levels.txt"]],
 	"input": "&main_nml /\n",
-	"args" : [
+	"command" : [
             "$build_dir/test_find_contours",
             "$input_dir/example.nc"
 	]
@@ -35,7 +35,7 @@
 	"title" : "Borders",
 	"input" : "&main_nml /\n",
 	"required" : [["$input_dir/levels_2.txt", "levels.txt"]],
-	"args" : [
+	"command" : [
 	    "$build_dir/test_find_contours",
 	    "$input_dir/h.nc"
 	]
@@ -45,14 +45,14 @@
 	"title" : "Reg_grid_zmax",
 	"required" : [["$input_dir/levels_1.txt", "levels.txt"]],
 	"input": "&main_nml ZMAX=10. /\n",
-	"args" : [
+	"command" : [
             "$build_dir/test_find_contours",
             "$input_dir/example.nc"
 	]
     },
     {
 	"title" : "Irreg_grid",
-	"args" : ["$build_dir/test_find_contours", 
+	"command" : ["$build_dir/test_find_contours", 
 		  "$input_dir/example_irreg.nc"],
 	"description" : "Irregular grid.",
 	"input": "&main_nml reg_grid = f /\n",
@@ -63,7 +63,7 @@
 	"title" : "Missing",
 	"required" : [["$input_dir/levels_1.txt", "levels.txt"]],
 	"input": "&main_nml ZMAX=80. /\n",
-	"args" : [
+	"command" : [
             "$build_dir/test_find_contours",
             "$input_dir/example_missing.nc"
 	]

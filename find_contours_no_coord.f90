@@ -35,6 +35,8 @@ contains
           read(unit) jump
           contours(i)%n_points = contours(i)%n_points + 1
           if (jump == 4 .or. jump == 5) then
+             ! 4 - FINISH A CONTOUR AT A BOUNDARY,
+             ! 5 - FINISH A CLOSED CONTOUR (NOT AT A BOUNDARY).
              contours(i)%closed = jump == 5
              exit
           end if

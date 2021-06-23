@@ -3,7 +3,7 @@ module draw_to_scratch_m
   implicit none
 
   integer, protected:: unit
-  integer, protected:: n_cont ! number of contours
+  integer, save, protected:: n_cont ! number of contours
 
 contains
 
@@ -22,10 +22,13 @@ contains
     JUMP = MOD(IFLAG, 10)
     
     if (jump == 6) then
+       ! 6 - SET X AND Y TO THE APPROXIMATE 'PEN' POSITION
        X = 0.
        Y = 0.
     else
        if (jump == 2 .or. jump == 3) n_cont = n_cont + 1
+       ! 2 - START A CONTOUR AT A BOUNDARY,
+       ! 3 - START A CONTOUR NOT AT A BOUNDARY,
        write(unit) JUMP, IFLAG / 10, X, Y
     end if
     

@@ -21,7 +21,7 @@ endif()
 target_link_libraries(contour_531 PRIVATE jumble nr_util)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 include(ConfigureCompilerFlags)
-add_subdirectory(Test EXCLUDE_FROM_ALL)
+add_subdirectory(Tests EXCLUDE_FROM_ALL)
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(Config.cmake.in

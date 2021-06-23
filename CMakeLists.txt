@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(Contour_531 Fortran)
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release Profile)
 
 add_library(contour_531 gcontr.f90 iget.f90 mark1.f90 contour_531.f90
   find_contours_irreg_grid.f90 draw_to_scratch.f90 polyline.f90

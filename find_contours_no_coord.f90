@@ -10,7 +10,8 @@ contains
     ! then the last element in the component arrays for this contour
     ! repeats the first element.
 
-    use draw_to_scratch_m, only: init_scratch, draw_to_scratch, n_cont, unit
+    use draw_to_scratch_m, only: init_scratch, draw_to_scratch, n_cont, jump, &
+         points
     use GCONTR_m, only: gcontr
     use polyline_m, only: polyline
 
@@ -19,7 +20,7 @@ contains
     real, intent(in), optional:: zmax
 
     ! Local:
-    integer jump, trash, j
+    integer j
     integer i ! contour index
 
     !-----------------------------------------------------------
@@ -28,32 +29,28 @@ contains
     call GCONTR(Z, [level], draw_to_scratch, ZMAX)
     allocate(contours(n_cont))
     contours%n_points = 0
-    rewind(unit)
+    j = 0
 
     do i = 1, n_cont
        do
-          read(unit) jump
+          j = j + 1
           contours(i)%n_points = contours(i)%n_points + 1
-          if (jump == 4 .or. jump == 5) then
+          if (jump(j) == 4 .or. jump(j) == 5) then
              ! 4 - FINISH A CONTOUR AT A BOUNDARY,
              ! 5 - FINISH A CLOSED CONTOUR (NOT AT A BOUNDARY).
-             contours(i)%closed = jump == 5
+             contours(i)%closed = jump(j) == 5
              exit
           end if
        end do
     end do
            
-    rewind(unit)
+    j = 0
 
     do i = 1, n_cont
        allocate(contours(i)%points(2, contours(i)%n_points))
-
-       do j = 1, contours(i)%n_points
-          read(unit) trash, trash, contours(i)%points(:, j)
-       end do
+       contours(i)%points = points(:, j + 1:j + contours(i)%n_points)
+       j = j + contours(i)%n_points
     end do
-
-    close(unit)
 
     ! Correct really strange behavior which is sometimes encountered:
     forall (i = 1:n_cont, contours(i)%closed .and. &

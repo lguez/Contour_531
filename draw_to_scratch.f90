@@ -2,8 +2,11 @@ module draw_to_scratch_m
 
   implicit none
 
-  integer, protected:: unit
   integer, save, protected:: n_cont ! number of contours
+  integer, save, private:: n_points
+  integer, allocatable, save:: jump(:) ! (max_points)
+  integer:: max_points = 10
+  real, allocatable, save:: points(:, :) ! (2, max_points)
 
 contains
 
@@ -15,7 +18,9 @@ contains
     integer, intent(in):: iflag
 
     ! Local:
-    integer jump_scal
+    integer jump_scal, dble_max_points
+    integer, allocatable:: tmp_jump(:)
+    real, allocatable:: tmp_points(:, :)
 
     !-----------------------------------------------------------
 
@@ -29,7 +34,22 @@ contains
        if (jump_scal == 2 .or. jump_scal == 3) n_cont = n_cont + 1
        ! 2 - START A CONTOUR AT A BOUNDARY,
        ! 3 - START A CONTOUR NOT AT A BOUNDARY,
-       write(unit) JUMP_SCAL, IFLAG / 10, X, Y
+       n_points = n_points + 1
+
+       if (n_points > max_points) then
+          dble_max_points = 2 * max_points
+          allocate(tmp_jump(dble_max_points), tmp_points(2, dble_max_points))
+          tmp_jump(:max_points) = jump
+          tmp_points(:, :max_points) = points
+          call move_alloc(tmp_jump, jump)
+          call move_alloc(tmp_points, points)
+          max_points = dble_max_points
+          print *, "draw_to_scratch: doubled size of jump and points to", &
+               max_points
+       end if
+       
+       JUMP(n_points) = jump_scal
+       points(:, n_points) = [X, Y]
     end if
     
   END SUBROUTINE draw_to_scratch
@@ -38,13 +58,12 @@ contains
 
   subroutine init_scratch
 
-    use jumble, only: new_unit
 
     !---------------------------------------
 
-    call new_unit(unit)
-    open(unit, form = "unformatted", status = "scratch", action = "readwrite")
     n_cont = 0
+    n_points = 0
+    if (.not. allocated(jump)) allocate(jump(max_points), points(2, max_points))
 
   end subroutine init_scratch
 

@@ -9,12 +9,14 @@ message(STATUS
 
 message(STATUS "-- NetCDF-Fortran libraries: ${NetCDF_Fortran_LINK_LIBRARIES}")
 
-if(PKG_CONFIG_VERSION_STRING VERSION_LESS "0.29.2")
+if(PKG_CONFIG_VERSION_STRING VERSION_LESS "0.29.2"
+    OR PKG_CONFIG_VERSION_STRING VERSION_GREATER "1.1")
   # pkg-config strips system flags out of cflags. They do not appear
   # with prefix -isystem when pkg-config is run with
   # --cflags-only-I. So cmake does not get them. So we have to
   # duplicate the call to pkg_get_variable that is already in
   # pkg_check_modules.
+  # Version > 1.1 means we are using pkgconf from pkgconf.org
   pkg_get_variable(pkg_netcdf_fortran_includedir netcdf-fortran includedir)
 
   target_include_directories(PkgConfig::NetCDF_Fortran INTERFACE

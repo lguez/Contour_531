@@ -15,10 +15,9 @@ target_include_directories(contour_531 PUBLIC
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(NR_util CONFIG REQUIRED)
-  find_package(Jumble CONFIG REQUIRED)
 endif()
 
-target_link_libraries(contour_531 PRIVATE jumble nr_util)
+target_link_libraries(contour_531 PRIVATE nr_util)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 include(ConfigureCompilerFlags)
 add_subdirectory(Tests EXCLUDE_FROM_ALL)

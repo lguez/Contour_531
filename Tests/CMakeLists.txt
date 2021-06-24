@@ -7,6 +7,7 @@ if(NOT TARGET NetCDF95::netcdf95)
 endif()
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  find_package(Jumble CONFIG REQUIRED)
   find_package(Shapelib_03 CONFIG REQUIRED)
   find_package(Geometry CONFIG REQUIRED)
   find_package(Numer_Rec_95 CONFIG REQUIRED)

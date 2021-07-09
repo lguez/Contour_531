@@ -32,7 +32,8 @@ target_link_libraries(test_gcontr PRIVATE contour_531 numer_rec_95
 add_executable(test_find_contours test_find_contours.f90)
 
 target_link_libraries(test_find_contours PRIVATE jumble
-  NetCDF95::netcdf95 shapelib_03 contour_531 geometry nr_util)
+  NetCDF_Fortran::NetCDF_Fortran NetCDF95::netcdf95 shapelib_03
+  contour_531 geometry nr_util)
 
 add_custom_target(tests_contour_531)
 

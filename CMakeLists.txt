@@ -19,8 +19,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 target_link_libraries(contour_531 PRIVATE nr_util)
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
-include(ConfigureCompilerFlags)
 add_subdirectory(Tests EXCLUDE_FROM_ALL)
 
 include(CMakePackageConfigHelpers)

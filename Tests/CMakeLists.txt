@@ -13,6 +13,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 # test_find_contours_no_coord
+
 add_executable(test_find_contours_no_coord
   test_find_contours_no_coord.f90 define_example.f90)
 
@@ -33,6 +34,8 @@ add_executable(test_find_contours test_find_contours.f90)
 target_link_libraries(test_find_contours PRIVATE jumble
   NetCDF_Fortran::NetCDF_Fortran NetCDF95::netcdf95 shapelib_03
   contour_531 geometry nr_util)
+
+# tests_contour_531
 
 add_custom_target(tests_contour_531)
 

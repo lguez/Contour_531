@@ -18,7 +18,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(NR_util CONFIG REQUIRED)
 endif()
 
-target_link_libraries(contour_531 PRIVATE nr_util)
+target_link_libraries(contour_531 PRIVATE NR_util::nr_util)
 add_subdirectory(Tests EXCLUDE_FROM_ALL)
 add_library(Contour_531::contour_531 ALIAS contour_531)
 

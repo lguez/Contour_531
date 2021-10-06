@@ -20,6 +20,7 @@ endif()
 
 target_link_libraries(contour_531 PRIVATE nr_util)
 add_subdirectory(Tests EXCLUDE_FROM_ALL)
+add_library(Contour_531::contour_531 ALIAS contour_531)
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(Config.cmake.in
@@ -39,5 +40,8 @@ install(TARGETS contour_531 EXPORT ${PROJECT_NAME}Targets LIBRARY
   INCLUDES DESTINATION ${install_include_dir})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   DESTINATION lib/cmake/${PROJECT_NAME})
-install(EXPORT ${PROJECT_NAME}Targets DESTINATION lib/cmake/${PROJECT_NAME})
-export(EXPORT ${PROJECT_NAME}Targets)
+
+install(EXPORT ${PROJECT_NAME}Targets DESTINATION
+  lib/cmake/${PROJECT_NAME} NAMESPACE Contour_531::)
+
+export(EXPORT ${PROJECT_NAME}Targets NAMESPACE Contour_531::)

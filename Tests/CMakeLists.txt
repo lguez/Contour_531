@@ -1,7 +1,6 @@
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
-
 if(NOT TARGET NetCDF95::netcdf95)
   find_package(NetCDF95 CONFIG REQUIRED)
+  set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
   find_package(NetCDF REQUIRED)
   find_package(NetCDF_Fortran REQUIRED)
 endif()

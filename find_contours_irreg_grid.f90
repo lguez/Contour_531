@@ -9,9 +9,11 @@ contains
 
     ! Subroutine because there is input/ouput.
 
+    ! Libraries:
+    use nr_util, only: assert_eq
+
     use convert_to_irreg_coord_m, only: convert_to_irreg_coord
     use find_contours_no_coord_m, only: find_contours_no_coord
-    use nr_util, only: assert_eq
     use polyline_m, only: polyline
 
     real, intent(in):: x_nodes(:) ! (nx)

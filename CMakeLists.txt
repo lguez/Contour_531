@@ -41,8 +41,8 @@ else()
   install(FILES ${PROJECT_BINARY_DIR}/modules/contour_531.mod TYPE INCLUDE)
 endif()
 
-install(TARGETS contour_531 EXPORT ${PROJECT_NAME}Targets LIBRARY
-  INCLUDES DESTINATION ${install_include_dir})
+install(TARGETS contour_531 EXPORT ${PROJECT_NAME}Targets INCLUDES
+  DESTINATION ${install_include_dir})
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   DESTINATION lib/cmake/${PROJECT_NAME})

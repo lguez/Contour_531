@@ -24,11 +24,7 @@ add_library(Contour_531::contour_531 ALIAS contour_531)
 
 # Start installation part
 
-include(CMakePackageConfigHelpers)
-
-configure_package_config_file(Config.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-    INSTALL_DESTINATION lib/cmake/${PROJECT_NAME})
+configure_file(Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES NAG|Intel)
   set(install_include_dir include/${PROJECT_NAME})

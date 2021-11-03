@@ -20,7 +20,7 @@ endif()
 
 target_link_libraries(contour_531 PRIVATE NR_util::nr_util)
 add_subdirectory(Tests EXCLUDE_FROM_ALL)
-add_library(Contour_531::contour_531 ALIAS contour_531)
+add_library(${PROJECT_NAME}::contour_531 ALIAS contour_531)
 configure_file(${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
 
 # Start installation part
@@ -43,8 +43,8 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
   DESTINATION lib/cmake/${PROJECT_NAME})
 
 install(EXPORT ${PROJECT_NAME}Targets DESTINATION
-  lib/cmake/${PROJECT_NAME} NAMESPACE Contour_531::)
+  lib/cmake/${PROJECT_NAME} NAMESPACE ${PROJECT_NAME}::)
 
 # End installation part
 
-export(EXPORT ${PROJECT_NAME}Targets NAMESPACE Contour_531::)
+export(EXPORT ${PROJECT_NAME}Targets NAMESPACE ${PROJECT_NAME}::)

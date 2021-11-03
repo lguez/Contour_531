@@ -10,6 +10,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(Numer_Rec_95 CONFIG REQUIRED)
 endif()
 
+find_package(fortrangis CONFIG REQUIRED)
+
 # test_find_contours_no_coord
 
 add_executable(test_find_contours_no_coord
@@ -31,7 +33,7 @@ add_executable(test_find_contours test_find_contours.f90)
 
 target_link_libraries(test_find_contours PRIVATE jumble
   NetCDF_Fortran::netcdff NetCDF95::netcdf95 shapelib_03 contour_531
-  geometry nr_util)
+  geometry nr_util fortrangis::fortranGIS)
 
 # tests_contour_531
 

@@ -8,7 +8,7 @@ contains
 
   subroutine define_example_reg(x_min, y_min, step_x, step_y, z, cv)
 
-    use nr_util, only: arth
+    use jumble, only: arth
     
     real, intent(out):: x_min, y_min, step_x, step_y
     real, intent(out), allocatable:: z(:, :) ! (nx, ny)

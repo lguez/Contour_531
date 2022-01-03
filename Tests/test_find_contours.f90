@@ -5,11 +5,10 @@ program test_find_contours
   use contour_531, only: find_contours_reg_grid, find_contours_irreg_grid, &
        polyline
   use geometry, only: polygon_area_2d
-  use jumble, only: read_column, get_command_arg_dyn
+  use jumble, only: read_column, get_command_arg_dyn, assert
   use netcdf, only: nf90_nowrite
   use netcdf95, only: nf95_open, nf95_get_var, nf95_inq_varid, nf95_close, &
        nf95_gw_var
-  use nr_util, only: assert
   use shapelib, only: shpfileobject, shpt_polygon, ftdouble, shpclose, shpt_arc
   use shapelib_03, only: shp_create_03, dbf_add_field_03, &
        shp_append_object_03, dbf_write_attribute_03

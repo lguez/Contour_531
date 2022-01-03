@@ -15,10 +15,10 @@ target_include_directories(contour_531 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/modules>)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-  find_package(NR_util CONFIG REQUIRED)
+  find_package(Jumble CONFIG REQUIRED)
 endif()
 
-target_link_libraries(contour_531 PRIVATE NR_util::nr_util)
+target_link_libraries(contour_531 PRIVATE Jumble::jumble)
 add_subdirectory(Tests EXCLUDE_FROM_ALL)
 add_library(${PROJECT_NAME}::contour_531 ALIAS contour_531)
 configure_file(${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)

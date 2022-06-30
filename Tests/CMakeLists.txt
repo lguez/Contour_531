@@ -10,7 +10,18 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(Numer_Rec_95 CONFIG REQUIRED)
 endif()
 
-find_package(fortrangis CONFIG REQUIRED)
+if(NOT TARGET fortrangis::fortranGIS)
+  option(FETCH "Download and build FortranGIS")
+
+  if(FETCH)
+    include(FetchContent)
+    FetchContent_Declare(fortrangis GIT_REPOSITORY
+      https://github.com/ARPA-SIMC/fortrangis)
+    FetchContent_MakeAvailable(fortrangis)
+  else()
+    find_package(fortrangis CONFIG REQUIRED)
+  endif()
+endif()
 
 # test_find_contours_no_coord
 add_executable(test_find_contours_no_coord

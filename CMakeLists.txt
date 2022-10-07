@@ -10,6 +10,7 @@ set_target_properties(contour_531 PROPERTIES Fortran_MODULE_DIRECTORY
   ${PROJECT_BINARY_DIR}/modules)
 target_include_directories(contour_531 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/modules>)
+target_compile_definitions(contour_531 PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   find_package(Jumble CONFIG REQUIRED)

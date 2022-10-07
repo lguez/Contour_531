@@ -44,8 +44,10 @@ contains
           call move_alloc(tmp_jump, jump)
           call move_alloc(tmp_points, points)
           max_points = dble_max_points
+#ifdef DEBUG
           print *, "draw_to_scratch: doubled size of jump and points to", &
                max_points
+#endif
        end if
        
        JUMP(n_points) = jump_scal

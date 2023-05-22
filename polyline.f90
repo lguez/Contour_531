@@ -4,7 +4,11 @@ module polyline_m
 
   type polyline
      integer n_points
-     logical closed ! last point == first point, both are stored
+
+     logical closed
+     ! last point == first point, both are stored. Should imply
+     ! n_points >= 2.
+
      real, allocatable:: points(:, :) ! (2, n_points)
   end type polyline
 

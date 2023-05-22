@@ -6,9 +6,12 @@ contains
 
   subroutine find_contours_reg_grid(corner, step, z, level, contours, zmax)
 
-    ! Subroutine because there is input/ouput. If a contour is closed
-    ! then the last element in the component arrays for this contour
-    ! repeats the first element.
+    ! Subroutine because there is input/ouput. The grid is cartesian
+    ! with uniform spacing. If a contour is closed then the last point
+    ! for this contour repeats the first point. If a contour is closed
+    ! then the number of points in the contour (component n_points) is
+    ! >= 4. For a closed contour, the order of points (clockwise or
+    ! counter-clockwise) is not specified.
 
     use convert_to_reg_coord_m, only: convert_to_reg_coord
     use find_contours_no_coord_m, only: find_contours_no_coord

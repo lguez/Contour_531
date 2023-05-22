@@ -7,7 +7,9 @@ contains
   subroutine find_contours_irreg_grid(x_nodes, y_nodes, z, level, contours, &
        zmax)
 
-    ! Subroutine because there is input/ouput.
+    ! Subroutine because there is input/ouput. The grid is cartesian,
+    ! but the spacing between coordinates of the mesh points may not
+    ! be uniform.
 
     ! Libraries:
     use jumble, only: assert_eq

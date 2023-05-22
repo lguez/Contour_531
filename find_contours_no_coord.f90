@@ -7,8 +7,10 @@ contains
   subroutine find_contours_no_coord(z, level, contours, zmax)
 
     ! Subroutine because there is input/ouput. If a contour is closed
-    ! then the last element in the component arrays for this contour
-    ! repeats the first element.
+    ! then the last point for this contour repeats the first point. If
+    ! a contour is closed then the number of points in the contour
+    ! (component n_points) is >= 4. For a closed contour, the order of
+    ! points (clockwise or counter-clockwise) is not specified.
 
     use draw_to_scratch_m, only: init_scratch, draw_to_scratch, n_cont, jump, &
          points

@@ -158,7 +158,8 @@
 !     BOUNDARIES.
 !
       IBKEY = 0
-   10 IJ(1) = ICUR
+10    continue
+      IJ(1) = ICUR
       IJ(2) = JCUR
    20 L2(1) = IJ(1)
       L2(3) = -IJ(1)

@@ -4,7 +4,7 @@ module find_contours_reg_grid_m
 
 contains
 
-  subroutine find_contours_reg_grid(corner, step, z, level, contours, zmax)
+  subroutine find_contours_reg_grid(corner, z, level, contours, zmax, step)
 
     ! Subroutine because there is input/ouput. The grid is cartesian
     ! with uniform spacing. If a contour is closed then the last point
@@ -17,10 +17,11 @@ contains
     use find_contours_no_coord_m, only: find_contours_no_coord
     use polyline_m, only: polyline
 
-    real, intent(in):: corner(:), step(:) ! (2)
+    real, intent(in):: corner(:) ! (2)
     real, intent(in):: z(:, :), level
     type(polyline), allocatable, intent(out):: contours(:)
     real, intent(in), optional:: zmax
+    real, intent(in):: step(:) ! (2)
 
     ! Local:
     integer i

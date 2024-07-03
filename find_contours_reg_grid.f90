@@ -21,7 +21,7 @@ contains
     real, intent(in):: z(:, :), level
     type(polyline), allocatable, intent(out):: contours(:)
     real, intent(in), optional:: zmax
-    real, intent(in):: step(:) ! (2)
+    real, intent(in), optional:: step(:) ! (2)
 
     ! Local:
     integer i

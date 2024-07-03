@@ -5,6 +5,8 @@ module convert_to_reg_coord_m
   interface convert_to_reg_coord
      module procedure convert_int_to_reg_coord, convert_real_to_reg_coord, &
           convert_polyline_to_reg_coord
+     ! The difference between the arguments is the type of argument
+     ! ind. If step is absent then it is assumed to be [1., 1.].
   end interface convert_to_reg_coord
 
 contains

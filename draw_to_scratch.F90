@@ -4,9 +4,9 @@ module draw_to_scratch_m
 
   integer, save, protected:: n_cont ! number of contours
   integer, save, private:: n_points
-  integer, allocatable, save:: jump(:) ! (max_points)
-  integer:: max_points = 100
-  real, allocatable, save:: points(:, :) ! (2, max_points)
+  integer, allocatable, save, protected:: jump(:) ! (max_points)
+  integer, private:: max_points = 100
+  real, allocatable, save, protected:: points(:, :) ! (2, max_points)
 
 contains
 

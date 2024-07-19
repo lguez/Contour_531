@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16...3.28)
 list(APPEND CMAKE_MESSAGE_CONTEXT Contour_531)
 project(Contour_531 LANGUAGES Fortran)
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release Profile)

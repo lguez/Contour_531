@@ -17,7 +17,12 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 target_link_libraries(contour_531 PRIVATE Jumble::jumble)
-add_subdirectory(Tests EXCLUDE_FROM_ALL)
+option(ENABLE_TESTS "Enable building tests")
+
+if(ENABLE_TESTS)
+  add_subdirectory(Tests EXCLUDE_FROM_ALL)
+endif()
+
 add_library(${PROJECT_NAME}::contour_531 ALIAS contour_531)
 configure_file(${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
 

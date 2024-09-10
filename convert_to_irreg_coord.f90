@@ -4,7 +4,7 @@ module convert_to_irreg_coord_m
 
 contains
 
-  function convert_to_irreg_coord(x, nodes, steps)
+  pure function convert_to_irreg_coord(x, nodes, steps)
 
     real, intent(in):: x(:), nodes(:), steps(:)
     real convert_to_irreg_coord(size(x))
